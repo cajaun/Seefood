@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "313295047267",
+    "project_id": "seefood-e41c7",
+    "storage_bucket": "seefood-e41c7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313295047267:android:8cb5309c71a5eb472c0656",
+        "android_client_info": {
+          "package_name": "com.cajaun.seefood"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB06k9kw0Zo7EPakCu9ENPyVlMR__JZZ_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
