@@ -39,3 +39,4 @@ GoogleService-Info.plist
 *.tsbuildinfo
 
 app-example
+.env
