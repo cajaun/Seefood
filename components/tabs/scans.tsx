@@ -15,7 +15,6 @@ type FlatItem = {
   uri: string;
 };
 
-
 export default function ScansTab({ menuImages }: ScansTabProps) {
   const items = Object.entries(menuImages || {});
   const { top, bottom } = useSafeAreaInsets();
@@ -32,15 +31,24 @@ export default function ScansTab({ menuImages }: ScansTabProps) {
           paddingHorizontal: 20,
         }}
       >
-        <SymbolView name="menucard.fill" size={120} tintColor="#818785" />
+      
+        <SymbolView name="menucard.fill" size={120} tintColor="#818785" />{" "}
         <View style={{ marginTop: 30, alignItems: "center", gap: 10 }}>
-          <LargeTitle className="  text-white text-center" style={{color: "#fff", fontFamily: "Sf-black"}}>
+
+          <LargeTitle
+            className=" text-white text-center"
+            style={{ color: "#fff", fontFamily: "Sf-black" }}
+          >
+           
             Scan your first menu
           </LargeTitle>
-          <Title2 className="  text-white text-center" style={{color: "#818785", fontFamily: "Sf-black"}}>
+          <Title2
+            className=" text-white text-center"
+            style={{ color: "#818785", fontFamily: "Sf-black" }}
+          >
+            
             Menus scanned will appear here
           </Title2>
-          
         </View>
       </View>
     );
@@ -54,34 +62,45 @@ export default function ScansTab({ menuImages }: ScansTabProps) {
   const columns = 2;
   const imageSize = (SCREEN_WIDTH - 20 * 2 - 10 * (columns - 1)) / columns;
 
-  return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: "#151C1B" }}
-      contentContainerStyle={{
-        paddingTop: top,
-        paddingBottom: bottom,
-        paddingHorizontal: 12,
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-      <FlatList
-        data={flatData}
-        keyExtractor={(item) => `${item.name}-${item.uri}`}
-        numColumns={columns}
-        scrollEnabled={false} 
-        columnWrapperStyle={{ justifyContent: "space-between" }}
-        renderItem={({ item }) => (
-          <View style={{ width: imageSize, marginBottom: 20 }}>
+  const rows: JSX.Element[] = [];
+  for (let i = 0; i < flatData.length; i += columns) {
+    rows.push(
+      <View
+        key={`row-${i}`}
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 20,
+        }}
+      >
+        {flatData.slice(i, i + columns).map((item) => (
+          <View key={item.uri} style={{ width: imageSize }}>
             <Image
               source={{ uri: item.uri }}
               style={{ width: imageSize, height: imageSize, borderRadius: 16 }}
             />
-            <Text className="font-sfBold text-lg text-white mb-2">
+            <Text
+              style={{ color: "white", fontFamily: "Sf-bold", marginTop: 4 }}
+            >
               {item.name}
             </Text>
           </View>
-        )}
-      />
-    </ScrollView>
+        ))}
+      </View>
+    );
+  }
+
+  return (
+    <View
+      style={{
+        minHeight: SCREEN_HEIGHT - top - bottom,
+        paddingTop: (top ),
+        paddingBottom: bottom,
+        paddingHorizontal: 12,
+        backgroundColor: "#151C1B",
+      }}
+    >
+      {rows}
+    </View>
   );
 }

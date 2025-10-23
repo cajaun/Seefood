@@ -9,7 +9,7 @@ import {
 import { SCREEN_HEIGHT } from "@/components/constants";
 
 import ScansTab from "./scans";
-import CameraTab from "./camera";
+import CameraTab from "./camera/camera";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useOCR } from "@/lib/ocr";
 import Animated, {
@@ -17,6 +17,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { TopTabs } from "./top-tabs";
+import { sampleMenuImages } from "@/utils/data";
 
 const mainTabs = [
   { key: "Camera", component: CameraTab },
@@ -30,7 +31,8 @@ type Props = {
 export default function MainTab({ onScrollToggle }: Props) {
   const { top } = useSafeAreaInsets();
   const [menuImages, setMenuImages] = useState<Record<string, string[]>>({});
-  const { cameraRef, runOCR } = useOCR((partial) => {
+  // const [menuImages, setMenuImages] = useState(sampleMenuImages);
+  const { cameraRef, runOCR, isGenerating } = useOCR((partial) => {
     setMenuImages((prev) => ({ ...prev, ...partial }));
   });
 
@@ -55,6 +57,7 @@ export default function MainTab({ onScrollToggle }: Props) {
           runOCR={runOCR}
           setMenuImages={setMenuImages}
           scrollY={scrollY}
+          isGenerating={isGenerating}
         />
       );
     }
