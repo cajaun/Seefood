@@ -1,6 +1,7 @@
 import { OAuthProvider, signInWithCredential } from "firebase/auth";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { auth } from "@/FirebaseConfig";
+import { router } from "expo-router";
 
 export const AppleAuth = async () => {
   try {
@@ -17,6 +18,8 @@ export const AppleAuth = async () => {
     const appleCredential = provider.credential({ idToken: credential.identityToken });
 
     await signInWithCredential(auth, appleCredential);
+
+    router.replace("/(root)");
 
   } catch (e: any) {
     if (e.code === "ERR_REQUEST_CANCELED") {

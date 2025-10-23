@@ -7,6 +7,7 @@ export default {
     "slug": "seefood",
     extra: {
       OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
+      GEMINI_API_KEY: process.env.GEMINI_API_KEY,
       FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
       AUTH_DOMAIN: process.env.AUTH_DOMAIN,
       PROJECT_ID: process.env.PROJECT_ID,
@@ -43,6 +44,14 @@ export default {
       "expo-apple-authentication",
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ],
       [
         "expo-build-properties",
         {

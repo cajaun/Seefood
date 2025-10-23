@@ -147,7 +147,7 @@ export const FeatureItem: FC<Props> = ({
 const styles = StyleSheet.create({
   container: {
     borderCurve: "continuous",
-    backgroundColor: "#212121",
+    backgroundColor: "#2C2F2E",
     // shadowColor: "#1c1917",
     // shadowOffset: { width: 0, height: 4 },
     // shadowOpacity: 0.05,

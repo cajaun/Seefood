@@ -15,3 +15,14 @@ export const parseMenu = (text: string) => {
   if (currentDish) dishes.push(currentDish);
   return dishes;
 };
+
+export function extractMenuItems(text: string): string[] {
+ 
+  return text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l && !l.includes("$") && !/^[A-Z\s]+$/.test(l))
+    .map((l) => l.replace(/[-–—].*$/, "").trim()); 
+}
+
+

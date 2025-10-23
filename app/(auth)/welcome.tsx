@@ -221,7 +221,7 @@ const Onboarding = () => {
         scrollEventThrottle={16}
         renderItem={({ item, index }) => (
           <View
-            className="flex-1 bg-[#212121] justify-between  pt-6"
+            className="flex-1 bg-[#151C1B] justify-between  pt-6"
             style={{
               paddingTop: insets.top + HEADER_HEIGHT,
               paddingBottom: insets.bottom + 16,

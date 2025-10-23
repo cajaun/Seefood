@@ -1,8 +1,11 @@
 import React, { useState, useRef } from "react";
-import { View, Image, StyleSheet, Animated, Pressable } from "react-native";
+import { View, Image, StyleSheet, Pressable, Text } from "react-native";
 import { CameraView } from "expo-camera";
 import { SymbolView } from "expo-symbols";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { PressableScale } from "@/components/ui/utils/pressable-scale";
 import { useOCR } from "@/lib/ocr";
 import {
@@ -13,13 +16,34 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "@/components/constants";
+import ShimmerText from "../ui/shimmer";
+import Animated, {
+  Extrapolation,
+  interpolateColor,
+  SharedValue,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+import { Body, Headline, Title2, Title3 } from "../ui/utils/typography";
 
-export default function CameraTab() {
-  const { cameraRef, runOCR } = useOCR();
+type CameraTabProps = {
+  cameraRef: React.RefObject<CameraView>;
+  runOCR: () => Promise<Record<string, string[]>>;
+  setMenuImages?: React.Dispatch<
+    React.SetStateAction<Record<string, string[]>>
+  >;
+  scrollY?: SharedValue<number>;
+};
+
+export default function CameraTab({
+  cameraRef,
+  runOCR,
+  setMenuImages,
+  scrollY,
+}: CameraTabProps) {
   const [flash, setFlash] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();
+  const [cameraReady, setCameraReady] = useState(false);
 
   const handleCapture = async () => {
     if (!cameraRef.current) return;
@@ -31,13 +55,14 @@ export default function CameraTab() {
       });
       if (!photo?.uri) return;
 
-      // Immediately overlay the captured photo
       setPhotoUri(photo.uri);
-      fadeAnim.setValue(0);
-      Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true }).start();
 
-      // Run OCR in the background
-      runOCR();
+      const generatedImages = await runOCR();
+
+      if (setMenuImages) setMenuImages(generatedImages);
+
+      setPhotoUri(null);
+      // scrollToScans?.();
     } catch (e) {
       console.error(e);
     }
@@ -45,9 +70,27 @@ export default function CameraTab() {
 
   const retake = () => setPhotoUri(null);
 
+  const { top } = useSafeAreaInsets();
+  // const bgStyle = useAnimatedStyle(() => ({
+  //   backgroundColor: interpolateColor(
+  //     scrollY?.value ?? 0,
+  //     [0, SCREEN_HEIGHT / 2, SCREEN_HEIGHT],
+  //     ["#000000", "#222123", "#222123"], // keep last color for second half
+  //     "RGB"
+  //   )
+  // }));
+
   return (
-    <View style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, backgroundColor: "black" }}>
-      {/* Camera Frame */}
+    <Animated.View
+      style={[
+        {
+          width: SCREEN_WIDTH,
+          height: SCREEN_HEIGHT,
+          paddingTop: top,
+          backgroundColor: "#151C1B",
+        },
+      ]}
+    >
       <View
         style={{
           position: "absolute",
@@ -57,22 +100,40 @@ export default function CameraTab() {
           height: FRAME_HEIGHT,
           borderRadius: 28,
           overflow: "hidden",
-          backgroundColor: "black",
+          backgroundColor: "#2C2F2E",
         }}
       >
-        {/* Always keep camera mounted */}
-        <CameraView ref={cameraRef} style={{ flex: 1 }} facing="back" enableTorch={flash} />
+        <CameraView
+          ref={cameraRef}
+          style={{ flex: 1 }}
+          facing="back"
+          enableTorch={flash}
+          animateShutter={false}
+          onCameraReady={() => setCameraReady(true)}
+        />
 
-        {/* Fade-in captured photo overlay */}
+        {!cameraReady && (
+          <View
+            style={[
+              StyleSheet.absoluteFillObject,
+              {
+                backgroundColor: "#2C2F2E",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 20,
+              },
+            ]}
+          />
+        )}
+
         {photoUri && (
           <Animated.Image
             source={{ uri: photoUri }}
-            style={[StyleSheet.absoluteFillObject, { opacity: fadeAnim }]}
+            style={[StyleSheet.absoluteFillObject, {}]}
             resizeMode="cover"
           />
         )}
 
-        {/* Flash toggle */}
         <Pressable
           style={{
             position: "absolute",
@@ -85,30 +146,37 @@ export default function CameraTab() {
           }}
           onPress={() => setFlash(!flash)}
         >
-          <SymbolView name={flash ? "bolt.fill" : "bolt.slash.fill"} size={25} tintColor="white" />
+          <SymbolView
+            name={flash ? "bolt.fill" : "bolt.slash.fill"}
+            size={25}
+            tintColor="white"
+          />
         </Pressable>
       </View>
-
-      {/* Bottom controls */}
       <View
         style={{
           position: "absolute",
-          bottom: bottom + 120,
+          bottom: bottom + 130,
           width: "100%",
           flexDirection: "row",
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: "center",
-          gap: 30,
+          paddingHorizontal: 40,
         }}
       >
-        {/* Retake button */}
-        {photoUri && (
-          <PressableScale scale={0.75} onPress={retake}>
-            <SymbolView name="arrow.counterclockwise.circle.fill" size={50} tintColor="white" />
-          </PressableScale>
-        )}
+        <PressableScale
+          scale={0.75}
+          onPress={() => {
+            if (photoUri) retake();
+          }}
+        >
+          <SymbolView
+            name={photoUri ? "xmark" : "photo.on.rectangle.angled"}
+            size={40}
+            tintColor="white"
+          />
+        </PressableScale>
 
-        {/* Capture Button */}
         <View
           style={{
             width: 85,
@@ -120,18 +188,85 @@ export default function CameraTab() {
             alignItems: "center",
           }}
         >
-          <PressableScale scale={0.75} onPress={handleCapture}>
+          <PressableScale
+            scale={0.75}
+            onPress={async () => {
+              if (photoUri) {
+                await runOCR();
+                setPhotoUri(null);
+              } else {
+                handleCapture();
+              }
+            }}
+          >
             <View
               style={{
                 width: 70,
                 height: 70,
                 borderRadius: 35,
-                backgroundColor: "white",
+                backgroundColor: photoUri ? "#2D2F2E" : "white",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-            />
+            >
+              {photoUri && (
+                <SymbolView name="checkmark" size={30} tintColor="white" />
+              )}
+            </View>
           </PressableScale>
         </View>
+
+        <PressableScale scale={0.75}>
+          <SymbolView
+            name={
+              photoUri
+                ? "arrow.down.circle"
+                : "arrow.trianglehead.2.clockwise.rotate.90"
+            }
+            size={40}
+            tintColor="white"
+          />
+        </PressableScale>
       </View>
-    </View>
+
+      <PressableScale
+        style={{
+          position: "absolute",
+          bottom: bottom ,
+          alignSelf: "center",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 15,
+            padding: 12,
+          }}
+        >
+          <View className="p-1.5 rounded-xl bg-[#2C2F2E]">
+            <SymbolView name="menucard" size={30} tintColor="white" />
+          </View>
+
+          <Title2
+            className="   text-center"
+            style={{ color: "#ffffff", fontFamily: "Sf-black" }}
+          >
+            View menu
+          </Title2>
+        </View>
+
+        <SymbolView
+          name="chevron.compact.down"
+          size={35}
+          tintColor="white"
+          weight="semibold"
+        />
+      </PressableScale>
+    </Animated.View>
   );
 }

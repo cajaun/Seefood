@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { useCameraPermissions } from "expo-camera";
-import ProfileTab from "@/components/tabs/profile";
 import HistoryTab from "@/components/tabs/history";
 import MainTab from "@/components/tabs/main";
 import { SCREEN_WIDTH } from "@/components/constants";
+import { ListModelsResponse } from "@google/genai";
 
 
 const tabs = [
-  { key: "left", component: ProfileTab },
+  { key: "left", component: HistoryTab },
   { key: "camera", component: MainTab },
-  { key: "right", component: HistoryTab },
 ];
 
 export default function App() {
@@ -51,7 +50,7 @@ export default function App() {
       })}
       renderItem={renderTab}
       bounces={false}
-      scrollEnabled={outerScrollEnabled}
+     
     />
   );
 }

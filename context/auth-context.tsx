@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/FirebaseConfig";
 import { AppleAuth } from "@/services/apple-auth";
+import { router } from "expo-router";
 
 interface AuthContextType {
   user: User | null;
@@ -29,6 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     try {
       await auth.signOut();
+      router.replace("/(auth)/welcome")
     } catch (e) {
       console.error("Sign out error:", e);
     }
