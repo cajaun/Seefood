@@ -2,8 +2,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Stack, useRouter } from "expo-router";
 import "./global.css";
 import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
 import { AuthProvider, useAuth } from "@/context/auth-context";
 import { Text } from "react-native";
 import { ActionTrayProvider } from "@/context/action-tray-context";
@@ -23,57 +21,53 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-
       <AuthProvider>
-      <ActionTrayProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(auth)"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(root)"
-            options={{ headerShown: false, animation: "none" }}
-          />
-          <Stack.Screen
-            name="(modal)/settings"
-            options={{
-              sheetCornerRadius: 32,
-              headerShadowVisible: false,
-              presentation: "modal",
-              gestureDirection: "vertical",
-              animation: "slide_from_bottom",
- 
-              sheetGrabberVisible: true,
-             
-              title: "Settings",
-              headerTitle: () => (
-                <Text
-                  style={{
-                    fontFamily: "Sf-black",
-                    fontSize: 22,
-                    paddingTop: 10,
+        <ActionTrayProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(root)"
+              options={{ headerShown: false, animation: "none" }}
+            />
+            <Stack.Screen
+              name="(modal)/settings"
+              options={{
+                sheetCornerRadius: 32,
+                headerShadowVisible: false,
+                presentation: "formSheet",
+                gestureDirection: "vertical",
+                animation: "slide_from_bottom",
 
-                    color: "#fff",
-                  }}
-                >
-                  Settings
-                </Text>
-              ),
-              headerStyle: {
-                backgroundColor: "#161C1B",
-              },
+                sheetGrabberVisible: true,
 
-              contentStyle: {
-                backgroundColor: "#212121",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              },
-            }}
-          />
-        </Stack>
+                title: "Settings",
+                headerTitle: () => (
+                  <Text
+                    style={{
+                      fontFamily: "Sf-black",
+                      fontSize: 22,
+                      paddingTop: 10,
+
+                      color: "#fff",
+                    }}
+                  >
+                    Settings
+                  </Text>
+                ),
+                headerStyle: {
+                  backgroundColor: "#161C1B",
+                },
+
+                contentStyle: {
+                  backgroundColor: "#212121",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
+              }}
+            />
+          </Stack>
         </ActionTrayProvider>
       </AuthProvider>
     </GestureHandlerRootView>

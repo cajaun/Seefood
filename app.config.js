@@ -14,6 +14,9 @@ export default {
       STORAGE_BUCKET: process.env.STORAGE_BUCKET,
       MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
       APP_ID: process.env.APP_ID,
+      "eas": {
+        "projectId": "2e90c240-329b-461b-ace7-44b3f13e36eb"
+      }
     },
     "version": "1.0.0",
     "orientation": "portrait",
@@ -25,7 +28,7 @@ export default {
       "supportsTablet": true,
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.cajaun.seefood",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./ios/seefood/GoogleService-Info.plist"
     },
     "android": {
       googleServicesFile: "./google-services.json",
