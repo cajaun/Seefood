@@ -42,14 +42,14 @@ const data: OnboardingItem[] = [
       <View className="flex-1 justify-center p-4 ">
         <View className="flex-row justify-between space-x-2 mb-8">
           <View
-            className=" p-12 w-[48%] items-center h-48 bg-purple-200 rounded-3xl"
+            className=" p-12 w-[48%] items-center h-48 bg-[#2C2F2E] rounded-3xl"
             style={{
               transform: [{ rotate: "-5deg" }, { translateX: -15 }],
             }}
           ></View>
 
           <View
-            className="rounded-3xl p-8 w-[50%] items-center justify-center h-44 bg-blue-200"
+            className="rounded-3xl p-8 w-[50%] items-center justify-center h-44 bg-[#2C2F2E]"
             style={{
               transform: [
                 { rotate: "3deg" },
@@ -66,7 +66,7 @@ const data: OnboardingItem[] = [
 
         <View className="items-center">
           <View
-            className=" rounded-3xl p-8 w-[60%]  h-60 bg-green-200"
+            className=" rounded-3xl p-8 w-[60%]  h-60 bg-[#2C2F2E]"
             style={{ transform: [{ rotate: "1.5deg" }] }}
           >
             <Text className="text-2xl font-sfBold mt-4 text-gray-800 text-center"></Text>
@@ -83,21 +83,21 @@ const data: OnboardingItem[] = [
       <View className="flex-1 justify-center p-4 gap-y-8">
         <View className="items-center">
           <View
-            className=" rounded-3xl p-8 w-[60%]  h-60 bg-green-200"
+            className=" rounded-3xl p-8 w-[60%]  h-60 bg-[#2C2F2E]"
             style={{ transform: [{ rotate: "1.5deg" }] }}
           ></View>
         </View>
 
         <View className="flex-row justify-between space-x-4 mb-8">
           <View
-            className=" p-12 w-[48%] items-center h-48 bg-purple-200 rounded-3xl"
+            className=" p-12 w-[48%] items-center h-48 bg-[#2C2F2E] rounded-3xl"
             style={{
               transform: [{ rotate: "-5deg" }, { translateX: -30 }],
             }}
           ></View>
 
           <View
-            className="rounded-3xl p-8 w-[48%] items-center justify-center h-60 bg-blue-200 "
+            className="rounded-3xl p-8 w-[48%] items-center justify-center h-60 bg-[#2C2F2E]"
             style={{
               transform: [{ rotate: "3deg" }, { translateX: 30 }],
             }}
@@ -114,14 +114,14 @@ const data: OnboardingItem[] = [
       <View className="flex-1 justify-center p-4 ">
         <View className="flex-row justify-between space-x-4 mb-8">
           <View
-            className=" p-12 w-[48%] items-center h-48 bg-purple-200 rounded-3xl"
+            className=" p-12 w-[48%] items-center h-48 bg-[#2C2F2E] rounded-3xl"
             style={{
               transform: [{ rotate: "-5deg" }, { translateX: -30 }],
             }}
           ></View>
 
           <View
-            className="rounded-3xl p-8 w-[48%] items-center justify-center h-60 bg-blue-200 "
+            className="rounded-3xl p-8 w-[48%] items-center justify-center h-60 bg-[#2C2F2E] "
             style={{
               transform: [{ rotate: "3deg" }, { translateX: 30 }],
             }}
@@ -130,7 +130,7 @@ const data: OnboardingItem[] = [
 
         <View className="items-center">
           <View
-            className=" rounded-3xl p-8 w-[55%]  h-40 bg-green-200"
+            className=" rounded-3xl p-8 w-[55%]  h-40 bg-[#2C2F2E]"
             style={{
               transform: [{ rotate: "1.5deg" }, { translateX: -30 }],
             }}
@@ -237,7 +237,7 @@ const Onboarding = () => {
             )}
 
             <View className="items-center mb-10 mt-4 ">
-              <View className="mb-3 items-center justify-center h-8 ">
+              <View className="mb-3 items-center justify-center h-12 ">
                 <StaggeredText
                   text={item.title}
                   activeIndex={activeIndex}
@@ -276,12 +276,12 @@ const Onboarding = () => {
       >
         <Animated.View style={textStyle}>
           <ShimmerText
+            fixedWidth={180}
+            fixedHeight={30}
             style={{
               fontFamily: "Sf-bold",
               fontSize: 18,
               color: "#525252",
-              width: 180,
-              height: 20,
               textAlign: "center",
             }}
           >

@@ -1,13 +1,22 @@
 import ShimmerText from "@/components/ui/shimmer";
 import { PressableScale } from "@/components/ui/utils/pressable-scale";
 import { SymbolView } from "expo-symbols";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
-type ViewInfoProps = { bottomInset: number; isGenerating: boolean };
+type ViewInfoProps = {
+  bottomInset: number;
+  isGenerating: boolean;
+  scrollToTab?: (key: string) => void;
+};
 
-const ViewInfo = ({ bottomInset, isGenerating }: ViewInfoProps) => {
+const ViewInfo = ({
+  bottomInset,
+  isGenerating,
+  scrollToTab,
+}: ViewInfoProps) => {
   return (
     <PressableScale
+      onPress={() => scrollToTab?.("Scans")}
       style={{
         position: "absolute",
         bottom: bottomInset,
@@ -26,19 +35,41 @@ const ViewInfo = ({ bottomInset, isGenerating }: ViewInfoProps) => {
           padding: 12,
         }}
       >
-        <ShimmerText
-          shimmer={isGenerating}
-          style={{
-            fontFamily: "Sf-bold",
-            color: "#525252",
-            textAlign: "center",
-            fontSize: 22,
-            lineHeight: 28,
-            letterSpacing: 0.2,
-          }}
-        >
-          {isGenerating ? "Creating images" : "View menu"}
-        </ShimmerText>
+        {isGenerating ? (
+          <ShimmerText
+            fixedWidth={180}
+            fixedHeight={30}
+            style={{
+              fontFamily: "Sf-bold",
+              color: "#525252",
+              textAlign: "center",
+              fontSize: 22,
+              lineHeight: 28,
+              letterSpacing: 0.2,
+            }}
+          >
+            Creating images
+          </ShimmerText>
+        ) : (
+          <View
+           
+          >
+            <Text
+              style={{
+                fontFamily: "Sf-bold",
+                color: "#525252",
+                textAlign: "center",
+                fontSize: 22,
+                lineHeight: 28,
+                letterSpacing: 0.2,
+                width: 180,
+                height: 30,
+              }}
+            >
+              View Menu
+            </Text>
+          </View>
+        )}
       </View>
 
       <SymbolView

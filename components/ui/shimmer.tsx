@@ -20,6 +20,8 @@ type ShimmerTextProps = TextProps & {
   easing?: EasingFunction | EasingFunctionFactory;
   highlightColor?: string;
   shimmer?: boolean;
+  fixedWidth: number;
+  fixedHeight: number;
 };
 
 const ShimmerText = ({
@@ -28,10 +30,12 @@ const ShimmerText = ({
   easing = Easing.in(Easing.ease),
   highlightColor = "#ffffff",
   shimmer = true,
+  fixedWidth,
+  fixedHeight,
   ...textProps
 }: ShimmerTextProps) => {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const width = fixedWidth;
+  const height = fixedHeight;
 
   const translateX = useSharedValue(-width);
 
@@ -67,18 +71,11 @@ const ShimmerText = ({
     <View>
       {/* We need to keep the text with absolute position to have it under mask element so when the gradient moves it will be visible */}
       {/* We also use it to get the text width and height of the component as it's not possible to make dynamically inside the mask */}
-      {!shimmer ? (
-        <Text {...textProps}>{children}</Text>
-      ) : (
-        <>
+
           <Text
-            style={textProps.style}
+         style={[textProps.style, { width: width, height: height }]}
             className="absolute top-0 left-0 self-start pointer-events-none"
-            onLayout={(event) => {
-              const { width, height } = event.nativeEvent.layout;
-              setWidth(width);
-              setHeight(height);
-            }}
+            
           >
             {children}
           </Text>
@@ -111,9 +108,9 @@ const ShimmerText = ({
               />
             </Animated.View>
           </MaskedView>
-        </>
-      )}
-    </View>
+        </View>
+
+
   );
 };
 

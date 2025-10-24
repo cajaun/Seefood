@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { AnimatedChar } from "./animated-char";
 import React from "react";
 
-// alma-onboarding-carousel-animation 🔽
+
 
 type Props = {
   text: string; // Text content to animate character by character
@@ -55,4 +55,4 @@ export const StaggeredText: FC<Props> = ({ text, activeIndex, showIndex }: Props
   );
 };
 
-// alma-onboarding-carousel-animation 🔼
+

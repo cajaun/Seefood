@@ -9,7 +9,7 @@ import { PressableScale } from "../ui/utils/pressable-scale";
 import { router } from "expo-router";
 import { easeGradient } from "react-native-easing-gradient";
 
-export function TopTabs() {
+export function TopTabs({ scrollToTab }: { scrollToTab?: (key: string) => void }) {
   const { top } = useSafeAreaInsets();
   const grossHeight = top + 58;
 
@@ -33,6 +33,7 @@ export function TopTabs() {
         zIndex: 10,
         paddingHorizontal: 16,
         paddingVertical: 12,
+       
       }}
     >
      <LinearGradient
@@ -45,13 +46,16 @@ export function TopTabs() {
         className="flex-row justify-between items-center"
         style={{ paddingTop: top }}
       >
-        <View className="p-3 rounded-full bg-[#2C2F2E]">
+   <PressableScale
+      onPress={() => scrollToTab?.("history")}
+          className="p-3 rounded-full bg-[#2C2F2E]"
+        >
           <SymbolView
             name="clock.arrow.trianglehead.counterclockwise.rotate.90"
             tintColor="white"
             weight="semibold"
           />
-        </View>
+          </PressableScale>
 
         <PressableScale
           onPress={() => router.push("/(modal)/settings")}

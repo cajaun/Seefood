@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { View } from "react-native";
 import Animated, { SharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
 
-// alma-onboarding-carousel-animation 🔽
+
 
 interface DotsProps {
   numberOfDots: number; // Dynamic dot count for responsive pagination
@@ -42,4 +42,4 @@ const Dot: FC<DotProps> = ({ index, activeIndex }) => {
   return <Animated.View className="w-2 h-2 rounded-full" style={animatedStyle} />;
 };
 
-// alma-onboarding-carousel-animation 🔼
+

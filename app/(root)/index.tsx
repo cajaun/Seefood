@@ -1,20 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { useCameraPermissions } from "expo-camera";
-import HistoryTab from "@/components/tabs/history";
+import HistoryTab from "@/components/tabs/history/history";
 import MainTab from "@/components/tabs/main";
 import { SCREEN_WIDTH } from "@/components/constants";
-import { ListModelsResponse } from "@google/genai";
-
+import { useAuth } from "@/context/auth-context";
 
 const tabs = [
-  { key: "left", component: HistoryTab },
+  { key: "history", component: HistoryTab },
   { key: "camera", component: MainTab },
 ];
 
 export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
   const [outerScrollEnabled, setOuterScrollEnabled] = useState(true);
+  const flatListRef = useRef<FlatList>(null);
+  const { recentMenus } = useAuth();
+
+  const tabIndexMap = tabs.reduce((acc, tab, idx) => {
+    acc[tab.key] = idx;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const scrollToTab = (key: string) => {
+    const index = tabIndexMap[key];
+    if (index !== undefined) {
+      flatListRef.current?.scrollToIndex({ index, animated: true });
+    }
+  };
 
   if (!permission) return <View style={{ flex: 1 }} />;
   if (!permission.granted)
@@ -27,16 +40,22 @@ export default function App() {
       </View>
     );
 
-  const renderTab = ({ item }: { item: typeof tabs[0] }) => {
+  const renderTab = ({ item }: { item: (typeof tabs)[0] }) => {
     const Component = item.component;
-    if (item.key === "camera") {
-      return <Component onScrollToggle={setOuterScrollEnabled} />;
-    }
-    return <Component onScrollToggle={setOuterScrollEnabled}  />;
+
+
+    return (
+      <Component
+        onScrollToggle={setOuterScrollEnabled}
+        scrollToTab={scrollToTab}
+        recentMenus={recentMenus}
+      />
+    );
   };
 
   return (
     <FlatList
+      ref={flatListRef}
       data={tabs}
       keyExtractor={(item) => item.key}
       horizontal
@@ -50,7 +69,6 @@ export default function App() {
       })}
       renderItem={renderTab}
       bounces={false}
-     
     />
   );
 }

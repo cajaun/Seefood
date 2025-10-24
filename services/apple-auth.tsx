@@ -16,7 +16,7 @@ export const AppleAuth = async () => {
 
     const provider = new OAuthProvider("apple.com");
     const appleCredential = provider.credential({ idToken: credential.identityToken });
-
+    console.log(appleCredential)
     await signInWithCredential(auth, appleCredential);
 
     router.replace("/(root)");

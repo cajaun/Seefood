@@ -18,6 +18,7 @@ type CameraTabProps = {
   setMenuImages?: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   isGenerating: boolean;
   scrollY?: SharedValue<number>;
+  scrollToTab?: (key: string) => void 
 };
 
 export default function CameraTab({
@@ -25,12 +26,14 @@ export default function CameraTab({
   runOCR,
   setMenuImages,
   isGenerating,
+  scrollToTab,
 }: CameraTabProps) {
   const [flash, setFlash] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [cameraReady, setCameraReady] = useState(false);
   const [facing, setFacing] = useState<"front" | "back">("back");
   const { top, bottom } = useSafeAreaInsets();
+  
 
   const handleCapture = async () => {
     if (!cameraRef.current) return;
@@ -102,7 +105,7 @@ export default function CameraTab({
         setPhotoUri={setPhotoUri}
       />
 
-      <ViewInfo bottomInset={bottom} isGenerating={isGenerating} />
+      <ViewInfo bottomInset={bottom} isGenerating={isGenerating} scrollToTab={scrollToTab} />
     </Animated.View>
   );
 }

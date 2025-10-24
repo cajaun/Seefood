@@ -29,7 +29,7 @@ export async function generateFoodImage(prompt: string, count = 1): Promise<stri
 
     return images;
   } catch (err) {
-    console.error(`❌ Failed to generate image for "${prompt}":`, err);
+    console.error(` Failed to generate image for "${prompt}":`, err);
     return [];
   }
 }

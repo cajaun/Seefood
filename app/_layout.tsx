@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { AuthProvider, useAuth } from "@/context/auth-context";
 import { Text } from "react-native";
+import { ActionTrayProvider } from "@/context/action-tray-context";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -22,12 +23,14 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+
       <AuthProvider>
+      <ActionTrayProvider>
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen
             name="(auth)"
-            options={{ headerShown: false, animation: "none" }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="(root)"
@@ -71,6 +74,7 @@ export default function RootLayout() {
             }}
           />
         </Stack>
+        </ActionTrayProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );
